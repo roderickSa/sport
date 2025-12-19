@@ -7,7 +7,6 @@ export class CreateStadiumController implements Controller {
 
   async execute(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      console.log("CreateStadiumController executed");
       res.status(StatusCodes.OK).send();
     } catch (error) {
       next(error);

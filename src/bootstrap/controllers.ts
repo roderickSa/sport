@@ -1,8 +1,6 @@
 import { CreateStadiumController } from '../modules/stadium/infrastructure/controllers/create-stadium';
 
-type Requirements = {};
-
-export async function bootstrapControllers(requirements: Requirements) {
+export async function bootstrapControllers() {
   const createStadiumController = new CreateStadiumController();
 
   return {

@@ -1,5 +1,8 @@
 import { AppConfig } from './app-config';
 
 export function getConfig(env: string): AppConfig {
-  return require(`./${env.toLowerCase()}`).default as AppConfig;
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  const config = require(`./${env.toLowerCase()}`) as { default: AppConfig };
+  
+  return config.default;
 }
