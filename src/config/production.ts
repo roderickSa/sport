@@ -1,28 +1,18 @@
+import 'dotenv/config';
 import { AppConfig } from './app-config';
-//eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-export default {
+
+const conf: AppConfig = {
   server: {
-    port: process.env.PORT,
-    timeout: process.env.SERVER_TIMEOUT ?? 60000,
-  },
-  logger: {
-    console: false,
-    name: 'nodejs-template-back',
-    logstash: {
-      appName: '@project_name@',
-      host: 'logstash.justo.it',
-      port: 5000,
-      level: 'info',
-    },
-    httpClientConfig: { useLogger: true },
-    requestLogger: {
-      excludeRequestUri: ['/health'],
-    },
+    port: process.env.PORT ?? '8080',
+    timeout: Number(process.env.SERVER_TIMEOUT ?? 60000),
   },
   endpoints: {
-    externalResources: {
-      url: 'https://mock-api.mx',
-      timeout: 500,
+    apiFootball: {
+      url: 'https://apiv3.apifootball.com',
+      timeout: 20000,
+      apiKey: process.env.API_FOOTBALL_KEY,
     },
-  }
-} as AppConfig;
+  },
+}
+
+export default conf;
