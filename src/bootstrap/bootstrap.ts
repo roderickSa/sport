@@ -7,6 +7,7 @@ import { bootstrapUsecases } from './usecases';
 import { BootstrapAppConfig } from './app-config';
 import { createApiFootballHttpClient } from './http-clients';
 import { bootstrapServices } from './services';
+import { logger } from '../utils/logger';
 
 export async function bootstrap(): Promise<http.Server> {
   const config = BootstrapAppConfig.get();
@@ -19,7 +20,10 @@ export async function bootstrap(): Promise<http.Server> {
 
   const usecases = await bootstrapUsecases(services);
 
-  const controllers = await bootstrapControllers(usecases);
+  const controllers = await bootstrapControllers({
+    logger,
+    getCountriesUsecase: usecases.getCountriesUsecase,
+  });
 
   const routers = bootstrapRouters({
     createStadiumController: controllers.createStadiumController,

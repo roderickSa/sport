@@ -10,7 +10,11 @@ function normalizePort(portArg: string): boolean | number {
 }
 
 function onError(error: unknown) {
-  logger.error('#UNHANDLED ERROR:', error);
+  logger.error({
+    event: 'UNHANDLED_ERROR',
+    msg: 'Unhandled error occurred',
+    err: error,
+  });
 }
 
 export async function init(server: http.Server) {
@@ -20,8 +24,16 @@ export async function init(server: http.Server) {
     const port = normalizePort(config.server.port);
 
     server.on('error', onError);
+
     server.on('listening', () => {
-      logger.info({ env, port }, 'Server running');
+      logger.info({
+        event: 'SERVER_STARTED',
+        msg: 'Server running',
+        data: {
+          env,
+          port,
+        },
+      });
     });
 
     server.setTimeout(config.server.timeout);
@@ -31,7 +43,12 @@ export async function init(server: http.Server) {
 
     server.listen(port);
   } catch (error) {
-    logger.error(error);
+    logger.error({
+      event: 'BOOTSTRAP_ERROR',
+      msg: 'Error during server bootstrap',
+      err: error,
+    });
+
     process.exit(1);
   }
 }

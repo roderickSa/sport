@@ -2,16 +2,28 @@ import { NextFunction, Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import { Controller } from '../../../../shared/infrastructure/controllers/controller';
 import { GetCountriesUsecase } from '../../../usecases/get-countries/get-countries.usecase';
-import { GetCountriesBadRequest, GetCountriesException, GetCountriesSuccessfully } from '../../../ports/api-football/outputs/get-countries.output';
+import {
+  GetCountriesBadRequest,
+  GetCountriesException,
+  GetCountriesSuccessfully,
+} from '../../../ports/api-football/outputs/get-countries.output';
 import { GetCountriesSuccessfullyResponse } from './get-countries-successfully.response';
 import { GetCountriesBadRequestResponse } from './get-countries-bad-request.exception';
 import { GetCountriesInternalErrorResponse } from './get-countries-internal-error.exception';
+import { BaseLogger } from '../../../../../utils/logger/base-logger.interface';
 
 export class GetCountriesController implements Controller {
-  constructor(public readonly getCountriesUsecase: GetCountriesUsecase) {}
+  constructor(
+    public readonly logger: BaseLogger,
+    public readonly getCountriesUsecase: GetCountriesUsecase,
+  ) {}
 
   async execute(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
+      this.logger.info({
+        event: 'GetCountriesController#execute',
+        msg: 'Handling get countries request',
+      });
       const result = await this.getCountriesUsecase.execute();
 
       if (result instanceof GetCountriesSuccessfully) {
